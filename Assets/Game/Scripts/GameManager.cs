@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     // Singleton Design Pattern
-    public static GameManager gameManager;
+    public static GameManager instance;
 
     private void Awake()
     {
-        gameManager = this;
+        instance = this;
     }
 
 
