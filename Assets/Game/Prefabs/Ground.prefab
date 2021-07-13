@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 927687762804390150}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.22, y: -2, z: -38.83}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.5, y: 4, z: 10}
   m_Children: []
   m_Father: {fileID: 9032571032979178660}
@@ -142,3 +142,4 @@ MonoBehaviour:
   speed: 15
   objectDistance: -40
   despawnDistance: -110
+  cube: {fileID: 927687762804390150}

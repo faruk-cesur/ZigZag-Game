@@ -7,7 +7,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody rb;
-    [SerializeField] private float speed;
 
     private void Start()
     {
@@ -27,6 +26,5 @@ public class PlayerController : MonoBehaviour
                 transform.rotation = Quaternion.Euler(0, 0, 0);
             }
         }
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
 }
