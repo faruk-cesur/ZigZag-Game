@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using UnityEngine;
 
 public class ObjectPooler : MonoBehaviour
@@ -40,8 +37,8 @@ public class ObjectPooler : MonoBehaviour
                 obj.SetActive(false);
                 objectPool.Enqueue(obj);
             }
-            
-            poolDictonary.Add(pool.type,objectPool);
+
+            poolDictonary.Add(pool.type, objectPool);
         }
     }
 
@@ -57,8 +54,9 @@ public class ObjectPooler : MonoBehaviour
         objectToSpawn.SetActive(true);
         objectToSpawn.transform.position = position;
         objectToSpawn.transform.rotation = rotation;
-        
+        objectToSpawn.gameObject.GetComponent<Rigidbody>().isKinematic = true;
         poolDictonary[type].Enqueue(objectToSpawn);
+
 
         return objectToSpawn;
     }
