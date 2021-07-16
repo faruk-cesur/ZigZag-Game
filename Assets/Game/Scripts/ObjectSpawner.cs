@@ -42,7 +42,7 @@ public class ObjectSpawner : MonoBehaviour
     public void SpawnGround()
     {
         Vector3 _direction;
-        if (Random.Range(0, 3) == 0)
+        if (Random.Range(0, 2) == 0)
         {
             _direction = new Vector3(-2, 0, 0);
             diamond = Instantiate(diamond, startDirection+_direction + new Vector3(0, 5.6f, 0), diamond.transform.rotation);

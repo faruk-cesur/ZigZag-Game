@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,19 +14,32 @@ public class GameManager : MonoBehaviour
         instance = this;
     }
 
+    // private void Start()
+    // {
+    //     PlayerPrefs.DeleteAll();
+    // }
+
 
     public PlayerController player;
     private GameState _currentGameState;
     public GameObject prepareUI;
     public GameObject gameOverUI;
     public GameObject mainGameUI;
+    public GameObject particleDiamond;
     private int score;
     private int diamondScore;
     public Text scoreText;
     public Text goScoreText;
     public Text bestScoreText;
+    public Text prepareBestScore;
     public Text diamondText;
-
+    public Text prepareDiamondScoreText;
+    public AudioClip moveSound;
+    public AudioClip deathSound;
+    public AudioClip diamondSound;
+    public AudioClip multipleScoreSound;
+    public AudioClip startSound;
+    public Material material;
 
     // Using Game States Enum For Functionality
     public enum GameState
@@ -63,8 +77,12 @@ public class GameManager : MonoBehaviour
         switch (CurrentGameState)
         {
             case GameState.Prepare:
-                if (Input.GetMouseButtonDown(0))
+                player.BallMovement();
+                prepareBestScore.text = PlayerPrefs.GetInt("BestScore").ToString();
+                prepareDiamondScoreText.text = PlayerPrefs.GetInt("DiamondScore").ToString();
+                if (player.isStarted)
                 {
+                    AudioSource.PlayClipAtPoint(startSound,player.transform.position);
                     CurrentGameState = GameState.MainGame;
                 }
                 gameOverUI.SetActive(false);
@@ -77,7 +95,6 @@ public class GameManager : MonoBehaviour
                 player.DeathState();
                 mainGameUI.SetActive(true);
                 BestScore();
-                DiamondScore();
                 break;
             case GameState.GameOver:
                 gameOverUI.SetActive(true);
@@ -113,32 +130,34 @@ public class GameManager : MonoBehaviour
         {
             PlayerPrefs.SetInt("BestScore", score);
         }
-
         bestScoreText.text = PlayerPrefs.GetInt("BestScore").ToString();
-    }
-    
-    public void DiamondScore()
-    {
-        if (!PlayerPrefs.HasKey("DiamondScore"))
-        {
-            PlayerPrefs.SetInt("DiamondScore", diamondScore);
-        }
-        if (diamondScore <= PlayerPrefs.GetInt("DiamondScore"))
-        {
-            PlayerPrefs.SetInt("DiamondScore", diamondScore+PlayerPrefs.GetInt("DiamondScore"));
-        }
-
-        bestScoreText.text = PlayerPrefs.GetInt("DiamondScore").ToString();
     }
     
     public void CollectDiamond()
     {
         diamondScore++;
         diamondText.text = diamondScore.ToString();
+        if (!PlayerPrefs.HasKey("DiamondScore"))
+        {
+            PlayerPrefs.SetInt("DiamondScore", diamondScore);
+        }
+        if (true)
+        {
+            PlayerPrefs.SetInt("DiamondScore", 1+PlayerPrefs.GetInt("DiamondScore"));
+        }
+
+        prepareDiamondScoreText.text = PlayerPrefs.GetInt("DiamondScore").ToString();
     }
 
     public void DeathArea()
     {
+        StartCoroutine(ChangingGameOver());
+    }
+
+    IEnumerator ChangingGameOver()
+    {
+        AudioSource.PlayClipAtPoint(deathSound,player.transform.position);
+        yield return new WaitForSeconds(1f);
         CurrentGameState = GameState.GameOver;
     }
 }
