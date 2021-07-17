@@ -10,15 +10,15 @@ using Vector3 = UnityEngine.Vector3;
 
 public class PlayerController : MonoBehaviour
 {
+    // Variables Defined.
     public static bool isFall;
     private bool falling;
     public bool isStarted;
     private Rigidbody rb;
     private Vector3 direction;
-    private float speed = 300f;
+    private float speed = 500f;
     private float speedRise = 1f;
     private int scorePoint;
-    
 
     private void Start()
     {
@@ -27,19 +27,21 @@ public class PlayerController : MonoBehaviour
         scorePoint = 0;
     }
 
+    // Player will move when the game starts and game state is changed to main game
     private void FixedUpdate()
     {
-        if (GameManager.instance.CurrentGameState == GameManager.GameState.MainGame)
+        if (GameManager.instance.currentGameState == GameManager.GameState.MainGame)
         {
             rb.velocity = direction * speed * Time.deltaTime;
         }
 
-        if (GameManager.instance.CurrentGameState == GameManager.GameState.MainGame && falling == true)
+        if (GameManager.instance.currentGameState == GameManager.GameState.MainGame && falling == true)
         {
             rb.velocity = new Vector3(-2, -2, 1) * speed * Time.deltaTime;
         }
     }
 
+    // Controlling player movement and changing its direction by clicking the mouse button or tapping on mobile.
     public void BallMovement()
     {
         if (Input.GetMouseButtonDown(0))
@@ -54,18 +56,20 @@ public class PlayerController : MonoBehaviour
             }
 
             isStarted = true;
-            speed += speedRise;
-            scorePoint++;
-            GameManager.instance.UpdateScore();
-            AudioSource.PlayClipAtPoint(GameManager.instance.moveSound,transform.position);
-            if (scorePoint % 20 == 0)
+            speed += speedRise; // Each time we click, the player speeds up 
+            scorePoint++; // The color of the cubes changes every 20 points (Score %20 == 0)
+            GameManager.instance.UpdateScore(); // Each time we click, we gain a score
+            AudioSource.PlayClipAtPoint(GameManager.instance.moveSound, GameManager.instance.camera.transform.position);
+            if (scorePoint % 20 == 0) //The color of the cubes changes every 20 points 
             {
                 GameManager.instance.material.color = Random.ColorHSV().gamma;
-                AudioSource.PlayClipAtPoint(GameManager.instance.multipleScoreSound,transform.position);
+                AudioSource.PlayClipAtPoint(GameManager.instance.multipleScoreSound,
+                    GameManager.instance.camera.transform.position);
             }
         }
     }
 
+    // Camera will not follow the player when we fall
     public void DeathState()
     {
         if (transform.position.y <= -0.2f)
@@ -75,11 +79,12 @@ public class PlayerController : MonoBehaviour
 
         if (isFall == true)
         {
-            GameManager.instance.CurrentGameState = GameManager.GameState.GameOver;
+            GameManager.instance.currentGameState = GameManager.GameState.GameOver;
             return;
         }
     }
 
+    // Cubes are falling down when the player pass by
     private void OnCollisionExit(Collision other)
     {
         if (other.gameObject.CompareTag("Ground"))
@@ -89,12 +94,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Cubes are falling down after 0.25 seconds
     IEnumerator KinematicOff(GameObject kinematic)
     {
         yield return new WaitForSeconds(0.25f);
         kinematic.gameObject.GetComponent<Rigidbody>().isKinematic = false;
     }
 
+
+    // Collecting diamonds and check if the player has touched the death area 
     private void OnTriggerEnter(Collider other)
     {
         CollectDiamond collectDiamond = other.GetComponent<CollectDiamond>();
@@ -102,7 +110,8 @@ public class PlayerController : MonoBehaviour
         if (collectDiamond)
         {
             GameManager.instance.CollectDiamond();
-            AudioSource.PlayClipAtPoint(GameManager.instance.diamondSound, transform.position,2f);
+            AudioSource.PlayClipAtPoint(GameManager.instance.diamondSound,
+                GameManager.instance.camera.transform.position);
             Instantiate(GameManager.instance.particleDiamond, transform.position, Quaternion.identity);
             Destroy(other.gameObject);
         }

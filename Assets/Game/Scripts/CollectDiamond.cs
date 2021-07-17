@@ -4,15 +4,5 @@ using UnityEngine;
 
 public class CollectDiamond : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    // This script is using for reference instead of using TAGS.
 }

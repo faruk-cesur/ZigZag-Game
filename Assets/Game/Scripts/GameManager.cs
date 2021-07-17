@@ -3,10 +3,11 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
-    // Singleton Design Pattern
+    // Singleton Design Pattern to reach GameManager everywhere.
     public static GameManager instance;
 
     private void Awake()
@@ -14,17 +15,14 @@ public class GameManager : MonoBehaviour
         instance = this;
     }
 
-    // private void Start()
-    // {
-    //     PlayerPrefs.DeleteAll();
-    // }
-
-
+    // All Variables In Game Manager
     public PlayerController player;
-    private GameState _currentGameState;
+    public Camera camera;
+    public GameState currentGameState;
     public GameObject prepareUI;
     public GameObject gameOverUI;
     public GameObject mainGameUI;
+    public GameObject shopUI;
     public GameObject particleDiamond;
     private int score;
     private int diamondScore;
@@ -34,6 +32,7 @@ public class GameManager : MonoBehaviour
     public Text prepareBestScore;
     public Text diamondText;
     public Text prepareDiamondScoreText;
+    public Text shopDiamondScoreText;
     public AudioClip moveSound;
     public AudioClip deathSound;
     public AudioClip diamondSound;
@@ -49,45 +48,26 @@ public class GameManager : MonoBehaviour
         GameOver
     }
 
-    // Using extra switch for game state to run one time codes.
-    public GameState CurrentGameState
-    {
-        get { return _currentGameState; }
-        set
-        {
-            switch (value)
-            {
-                case GameState.Prepare:
-                    break;
-                case GameState.MainGame:
-                    break;
-                case GameState.GameOver:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(value), value, null);
-            }
-
-            _currentGameState = value;
-        }
-    }
-
     // Doing things in update when game state changes
     private void Update()
     {
-        switch (CurrentGameState)
+        switch (currentGameState)
         {
             case GameState.Prepare:
                 player.BallMovement();
                 prepareBestScore.text = PlayerPrefs.GetInt("BestScore").ToString();
                 prepareDiamondScoreText.text = PlayerPrefs.GetInt("DiamondScore").ToString();
+                shopDiamondScoreText.text = PlayerPrefs.GetInt("DiamondScore").ToString();
                 if (player.isStarted)
                 {
-                    AudioSource.PlayClipAtPoint(startSound,player.transform.position);
-                    CurrentGameState = GameState.MainGame;
+                    AudioSource.PlayClipAtPoint(startSound, camera.transform.position);
+                    currentGameState = GameState.MainGame;
                 }
+
                 gameOverUI.SetActive(false);
                 prepareUI.SetActive(true);
                 mainGameUI.SetActive(false);
+                shopUI.SetActive(false);
                 break;
             case GameState.MainGame:
                 player.BallMovement();
@@ -104,14 +84,15 @@ public class GameManager : MonoBehaviour
                 throw new ArgumentOutOfRangeException();
         }
     }
-    
+
     // Reloads the same scene. Using with button
     public void Retry()
     {
         Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.buildIndex);
     }
-    
+
+    // Score Increase Method
     public void UpdateScore()
     {
         score++;
@@ -119,20 +100,25 @@ public class GameManager : MonoBehaviour
         scoreText.text = score.ToString();
         goScoreText.text = scoreText.text;
     }
-    
+
+    // Keeping Best Score on HDD
     public void BestScore()
     {
         if (!PlayerPrefs.HasKey("BestScore"))
         {
             PlayerPrefs.SetInt("BestScore", score);
         }
+
         if (score > PlayerPrefs.GetInt("BestScore"))
         {
             PlayerPrefs.SetInt("BestScore", score);
         }
+
         bestScoreText.text = PlayerPrefs.GetInt("BestScore").ToString();
     }
-    
+
+
+    // Increasing numbers of collected diamonds and keep it on HDD
     public void CollectDiamond()
     {
         diamondScore++;
@@ -141,14 +127,17 @@ public class GameManager : MonoBehaviour
         {
             PlayerPrefs.SetInt("DiamondScore", diamondScore);
         }
+
         if (true)
         {
-            PlayerPrefs.SetInt("DiamondScore", 1+PlayerPrefs.GetInt("DiamondScore"));
+            PlayerPrefs.SetInt("DiamondScore", 1 + PlayerPrefs.GetInt("DiamondScore"));
         }
 
         prepareDiamondScoreText.text = PlayerPrefs.GetInt("DiamondScore").ToString();
     }
 
+
+    // When we fall, DeathArea method is running with a coroutine
     public void DeathArea()
     {
         StartCoroutine(ChangingGameOver());
@@ -156,8 +145,8 @@ public class GameManager : MonoBehaviour
 
     IEnumerator ChangingGameOver()
     {
-        AudioSource.PlayClipAtPoint(deathSound,player.transform.position);
+        AudioSource.PlayClipAtPoint(deathSound, camera.transform.position);
         yield return new WaitForSeconds(1f);
-        CurrentGameState = GameState.GameOver;
+        currentGameState = GameState.GameOver;
     }
 }

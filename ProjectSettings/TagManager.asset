@@ -5,6 +5,14 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - WhiteBall
+  - RedBall
+  - BlueBall
+  - GreenBall
+  - YellowBall
+  - PinkBall
+  - OrangeBall
+  - DefaultBall
   layers:
   - Default
   - TransparentFX
@@ -12,7 +20,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - ShopUI
   - 
   - 
   - 
