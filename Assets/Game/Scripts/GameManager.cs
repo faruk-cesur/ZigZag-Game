@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
 
     // All Variables In Game Manager
     public PlayerController player;
-    public Camera camera;
     public GameState currentGameState;
     public GameObject prepareUI;
     public GameObject gameOverUI;
@@ -33,11 +32,6 @@ public class GameManager : MonoBehaviour
     public Text diamondText;
     public Text prepareDiamondScoreText;
     public Text shopDiamondScoreText;
-    public AudioClip moveSound;
-    public AudioClip deathSound;
-    public AudioClip diamondSound;
-    public AudioClip multipleScoreSound;
-    public AudioClip startSound;
     public Material material;
 
     // Using Game States Enum For Functionality
@@ -60,7 +54,7 @@ public class GameManager : MonoBehaviour
                 shopDiamondScoreText.text = PlayerPrefs.GetInt("DiamondScore").ToString();
                 if (player.isStarted)
                 {
-                    AudioSource.PlayClipAtPoint(startSound, camera.transform.position);
+                    SoundManager.Instance.PlaySound(SoundManager.Instance.startSound, 1f);
                     currentGameState = GameState.MainGame;
                 }
 
@@ -145,7 +139,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator ChangingGameOver()
     {
-        AudioSource.PlayClipAtPoint(deathSound, camera.transform.position);
+        SoundManager.Instance.PlaySound(SoundManager.Instance.deathSound, 0.5f);
         yield return new WaitForSeconds(1f);
         currentGameState = GameState.GameOver;
     }

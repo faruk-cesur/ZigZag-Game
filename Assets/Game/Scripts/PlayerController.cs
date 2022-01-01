@@ -1,8 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Numerics;
-using UnityEditor.UIElements;
 using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
 using Random = UnityEngine.Random;
@@ -59,12 +55,11 @@ public class PlayerController : MonoBehaviour
             speed += speedRise; // Each time we click, the player speeds up 
             scorePoint++; // The color of the cubes changes every 20 points (Score %20 == 0)
             GameManager.instance.UpdateScore(); // Each time we click, we gain a score
-            AudioSource.PlayClipAtPoint(GameManager.instance.moveSound, GameManager.instance.camera.transform.position);
+            SoundManager.Instance.PlaySound(SoundManager.Instance.moveSound, 0.5f);
             if (scorePoint % 20 == 0) //The color of the cubes changes every 20 points 
             {
                 GameManager.instance.material.color = Random.ColorHSV().gamma;
-                AudioSource.PlayClipAtPoint(GameManager.instance.multipleScoreSound,
-                    GameManager.instance.camera.transform.position);
+                SoundManager.Instance.PlaySound(SoundManager.Instance.multipleScoreSound, 0.5f);
             }
         }
     }
@@ -110,8 +105,7 @@ public class PlayerController : MonoBehaviour
         if (collectDiamond)
         {
             GameManager.instance.CollectDiamond();
-            AudioSource.PlayClipAtPoint(GameManager.instance.diamondSound,
-                GameManager.instance.camera.transform.position);
+            SoundManager.Instance.PlaySound(SoundManager.Instance.diamondSound, 0.1f);
             Instantiate(GameManager.instance.particleDiamond, transform.position, Quaternion.identity);
             Destroy(other.gameObject);
         }

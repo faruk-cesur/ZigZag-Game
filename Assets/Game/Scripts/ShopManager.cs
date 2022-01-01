@@ -125,8 +125,7 @@ public class ShopManager : MonoBehaviour
     public void BuyDefaultBall()
     {
         ballMaterial.color = Color.black;
-        AudioSource.PlayClipAtPoint(GameManager.instance.multipleScoreSound,
-            GameManager.instance.camera.transform.position);
+        SoundManager.Instance.PlaySound(SoundManager.Instance.multipleScoreSound, 1f);
     }
 
 
@@ -148,8 +147,7 @@ public class ShopManager : MonoBehaviour
         {
             whiteBall.SetActive(true);
             ballMaterial.color = new Color(1, 1, 1, 1);
-            AudioSource.PlayClipAtPoint(GameManager.instance.multipleScoreSound,
-                GameManager.instance.camera.transform.position);
+            SoundManager.Instance.PlaySound(SoundManager.Instance.multipleScoreSound, 1f);
         }
     }
 
@@ -171,8 +169,7 @@ public class ShopManager : MonoBehaviour
         {
             redBall.SetActive(true);
             ballMaterial.color = new Color(1, 0, 0, 1);
-            AudioSource.PlayClipAtPoint(GameManager.instance.multipleScoreSound,
-                GameManager.instance.camera.transform.position);
+            SoundManager.Instance.PlaySound(SoundManager.Instance.multipleScoreSound, 1f);
         }
     }
 
@@ -194,8 +191,7 @@ public class ShopManager : MonoBehaviour
         {
             blueBall.SetActive(true);
             ballMaterial.color = new Color(0, 1, 1, 1);
-            AudioSource.PlayClipAtPoint(GameManager.instance.multipleScoreSound,
-                GameManager.instance.camera.transform.position);
+            SoundManager.Instance.PlaySound(SoundManager.Instance.multipleScoreSound, 1f);
         }
     }
 
@@ -217,8 +213,7 @@ public class ShopManager : MonoBehaviour
         {
             greenBall.SetActive(true);
             ballMaterial.color = new Color(0, 1, 0, 1);
-            AudioSource.PlayClipAtPoint(GameManager.instance.multipleScoreSound,
-                GameManager.instance.camera.transform.position);
+            SoundManager.Instance.PlaySound(SoundManager.Instance.multipleScoreSound, 1f);
         }
     }
 
@@ -240,8 +235,7 @@ public class ShopManager : MonoBehaviour
         {
             yellowBall.SetActive(true);
             ballMaterial.color = new Color(1, 1, 0, 1);
-            AudioSource.PlayClipAtPoint(GameManager.instance.multipleScoreSound,
-                GameManager.instance.camera.transform.position);
+            SoundManager.Instance.PlaySound(SoundManager.Instance.multipleScoreSound, 1f);
         }
     }
 
@@ -263,8 +257,7 @@ public class ShopManager : MonoBehaviour
         {
             pinkBall.SetActive(true);
             ballMaterial.color = new Color(1, 0, 1, 1);
-            AudioSource.PlayClipAtPoint(GameManager.instance.multipleScoreSound,
-                GameManager.instance.camera.transform.position);
+            SoundManager.Instance.PlaySound(SoundManager.Instance.multipleScoreSound, 1f);
         }
     }
 
@@ -286,8 +279,7 @@ public class ShopManager : MonoBehaviour
         {
             orangeBall.SetActive(true);
             ballMaterial.color = new Color(1, 0.5f, 0, 1);
-            AudioSource.PlayClipAtPoint(GameManager.instance.multipleScoreSound,
-                GameManager.instance.camera.transform.position);
+            SoundManager.Instance.PlaySound(SoundManager.Instance.multipleScoreSound, 1f);
         }
     }
 }
